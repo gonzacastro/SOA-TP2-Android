@@ -5,11 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import static javax.mail.internet.InternetAddress.*;
 
 public class GmailAuthentication extends AppCompatActivity {
     private EditText inputGmail;
@@ -43,6 +56,7 @@ public class GmailAuthentication extends AppCompatActivity {
     }
 
     private void sendMail(String mail){
+        /*
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
         emailIntent.setDataAndType(Uri.parse("mailto:"),"text/plain");
@@ -57,6 +71,10 @@ public class GmailAuthentication extends AppCompatActivity {
         catch (android.content.ActivityNotFoundException e) {
             Toast.makeText(getApplicationContext(), "Error al enviar el mail", Toast.LENGTH_SHORT).show();
         }
+        */
+        EmailAPI a = new EmailAPI(mail);
+        a.start();
+
 
     }
 
