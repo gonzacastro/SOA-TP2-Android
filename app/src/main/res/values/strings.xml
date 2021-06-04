@@ -8,7 +8,7 @@
     <string name="YOURUSERNAME">Your username</string>
     <string name="title_activity_gmail_authentication">GmailAuthentication</string>
     <string name="SENDCODE">Send code</string>
-    <string name="VERIFYCODE">Send code</string>
+    <string name="VERIFYCODE">Verify code</string>
     <string name="MAIL">GMAIL</string>
     <string name="INPUTGMAIL">Your gmail</string>
     <string name="CODE">Code </string>

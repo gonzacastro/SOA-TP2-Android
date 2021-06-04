@@ -1,8 +1,6 @@
 package com.example.tp2soa;
 
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Properties;
 
@@ -15,9 +13,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class EmailAPI extends Thread {
-    private String mail;
-    public EmailAPI(String mail) {
-        this.mail = mail;
+    private String gmail;
+    private long code;
+    private String mailHeader = " Appname Authentication Code";
+    private String mailBody = "Your code is:\n  ";
+    public EmailAPI(String mail,long code) {
+        this.gmail = mail;
+        this.code = code;
+        this.mailBody += code;
     }
 
     public void run() {
@@ -42,9 +45,9 @@ public class EmailAPI extends Thread {
             if(s != null) {
                 Message m = new MimeMessage(s);
                 m.setFrom(new InternetAddress(sender));
-                m.setSubject("Prueba SOA");
-                m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail));
-                m.setContent("me anduvo, ahora si a dormir :)", "text/plain");
+                m.setSubject(mailHeader);
+                m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(gmail));
+                m.setContent(mailBody, "text/plain");
 
                 Transport.send(m);
 
