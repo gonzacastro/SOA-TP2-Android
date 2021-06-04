@@ -60,7 +60,9 @@ public class GmailAuthentication extends AppCompatActivity {
 
     }
 
+    /*
     private boolean sendMail2(String mail){
 
     }
+    */
 }

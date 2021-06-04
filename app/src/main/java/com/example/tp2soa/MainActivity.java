@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText inputUsername;
     private  EditText inputPassword;
     private Button loginButton;
-
+//todas putas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
