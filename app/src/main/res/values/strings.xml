@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name"> </string>
+    <string name="LOGIN">Login</string>
+    <string name="USER">User</string>
+    <string name="APPNAME">Appname</string>
+    <string name="PASSWORD">Password</string>
+    <string name="YOURPASSWORD">Your password</string>
+    <string name="YOURUSERNAME">Your username</string>
+    <string name="title_activity_gmail_authentication">GmailAuthentication</string>
+    <string name="SENDCODE">Send code</string>
+    <string name="VERIFYCODE">Send code</string>
+    <string name="MAIL">GMAIL</string>
+    <string name="INPUTGMAIL">Your gmail</string>
+    <string name="CODE">Code </string>
+    <string name="INPUTCODE">Your code</string>
+    
+    
+
+
+</resources>
