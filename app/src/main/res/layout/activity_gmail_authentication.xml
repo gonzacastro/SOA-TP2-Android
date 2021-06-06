@@ -15,7 +15,7 @@
         android:autofillHints="@string/INPUTCODE"
         android:ems="10"
         android:hint="@string/INPUTCODE"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

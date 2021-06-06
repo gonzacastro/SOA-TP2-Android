@@ -1,5 +1,6 @@
 package com.example.tp2soa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +14,11 @@ public class GmailAuthentication extends AppCompatActivity {
     private static final long MILLISTOSECONDS = 1000;
     private static final long SECONDSTIMEOUT = 1;
 
-    private EditText inputGmail;
-    private EditText inputCode;
+    private static EditText inputGmail;
+    private static EditText inputCode;
     private Button sendCodeButton;
     private static Button authButton;
+    private static long actualCode;
 
     private static int sendCodeDisabled = 0;
     private long startTime = 0;
@@ -27,20 +29,22 @@ public class GmailAuthentication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gmail_authentication);
         Button authButton = findViewById(R.id.authButton);
+        EditText inputCode = findViewById(R.id.editTextCode);
+        this.inputCode = inputCode;
         this.authButton = authButton;
         authButton.setEnabled(false);
+        inputCode.setEnabled(false);
         authButton = findViewById(R.id.authButton);
 
         inputGmail = findViewById(R.id.editTextMail);
 
-        inputCode = findViewById(R.id.editTextCode);
 
         sendCodeButton = findViewById(R.id.sendCodeButton);
         sendCodeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 String gmail = inputGmail.getText().toString();
-                long actualCode;
+
 
                 //Toast.makeText(getApplicationContext(), "Enviando mail", Toast.LENGTH_SHORT).show();
 
@@ -63,6 +67,7 @@ public class GmailAuthentication extends AppCompatActivity {
                     sendMail(gmail, actualCode);
                     Toast.makeText(getApplicationContext(), "Enviando mail...", Toast.LENGTH_SHORT).show();
                     GmailAuthentication.authButton.setEnabled(true);
+                    GmailAuthentication.inputCode.setEnabled(true);
                 }
             }
         });
@@ -71,7 +76,19 @@ public class GmailAuthentication extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                long userCodeInput;
                 Toast.makeText(getApplicationContext(), "Boton activado", Toast.LENGTH_SHORT).show();
+                userCodeInput = Long.valueOf(inputCode.getText().toString());
+                if(userCodeInput == actualCode){
+                    Intent loginScreen = new Intent(GmailAuthentication.this,MainActivity.class);
+                    loginScreen.putExtra("mail",GmailAuthentication.inputGmail.getText().toString());
+                    startActivity(loginScreen);
+                    finish();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "El codigo es incorrecto o caduco", Toast.LENGTH_SHORT).show();
+                    inputCode.setText("");
+                }
             }
         });
     }
