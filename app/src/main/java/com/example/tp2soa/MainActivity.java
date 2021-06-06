@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText inputUsername;
     private  EditText inputPassword;
     private static Button loginButton;
+    private Button registerButton;
 //todas putas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button loginButton = findViewById(R.id.loginButton);
         this.loginButton  = loginButton;
+
+        registerButton = findViewById(R.id.registerButton);
+
         inputUsername = findViewById(R.id.EditTextUserName);
         inputPassword = findViewById(R.id.EditTextPassword);
         Intent nombreSimpatico = getIntent();
@@ -31,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = getInputUsername();
                 String password = getInputPassword();
+            }
+        });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(i);
             }
         });
     }
