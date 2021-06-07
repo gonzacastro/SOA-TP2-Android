@@ -44,7 +44,7 @@ public class GmailAuthentication extends AppCompatActivity {
         authButton.setEnabled(false);
         inputCode.setEnabled(false);
         //esto esta ´para saltear la autenticacion
-        authButton.setEnabled(true);
+        //authButton.setEnabled(true);
         authButton = findViewById(R.id.authButton);
 
         inputGmail = findViewById(R.id.editTextMail);
@@ -88,12 +88,15 @@ public class GmailAuthentication extends AppCompatActivity {
         authButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                /*
                 //esto esta para saltear la autenticacion
                 Intent loginScreen = new Intent(GmailAuthentication.this,MainActivity.class);
                 loginScreen.putExtra("mail",GmailAuthentication.inputGmail.getText().toString());
                 startActivity(loginScreen);
                 finish();
-                /*
+
+                 */
+
                 long userCodeInput;
                 if(inputCode.getText().toString().length() != 0) {
                     Log.e("estado", "entre al if");
@@ -112,7 +115,7 @@ public class GmailAuthentication extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Campo vacio", Toast.LENGTH_LONG).show();
                 }
-                */
+
             }
         });
     }
