@@ -1,6 +1,6 @@
-package com.example.tp2soa;
+package Models;
 
-public class DatoRegistro {
+public class RegistroRequest {
 
     private String env;
     private String name;
@@ -11,8 +11,8 @@ public class DatoRegistro {
     private int commission;
     private int group;
 
-    public DatoRegistro(String name, String lastname, int dni, String email, String password, int commission, int group) {
-        this.env = "TEST";
+    public RegistroRequest(String name, String lastname, int dni, String email, String password, int commission, int group) {
+        this.env = "PROD";
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;

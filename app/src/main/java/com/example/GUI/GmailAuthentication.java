@@ -1,4 +1,4 @@
-package com.example.tp2soa;
+package com.example.GUI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.mail.SendFailedException;
+import APIs.EmailAPI;
 
 public class GmailAuthentication extends AppCompatActivity {
     private static final long MILLISTOSECONDS = 1000;

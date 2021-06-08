@@ -1,4 +1,4 @@
-package com.example.tp2soa;
+package com.example.GUI;
 
 import android.content.Intent;
 import android.os.Bundle;

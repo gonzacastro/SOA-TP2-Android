@@ -1,4 +1,4 @@
-package com.example.tp2soa;
+package APIs;
 
 import android.content.Context;
 import android.os.Looper;
@@ -11,7 +11,6 @@ import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
-import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;

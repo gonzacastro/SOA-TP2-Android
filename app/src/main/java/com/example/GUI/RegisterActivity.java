@@ -1,8 +1,7 @@
-package com.example.tp2soa;
+package com.example.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,20 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
+import APIs.RetrofitAPI;
+import Models.RegistroRequest;
+import Models.RegistroResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetrofitAPI rfApi = rf.create(RetrofitAPI.class);
-        DatoRegistro dr = new DatoRegistro(name, apellido, Integer.valueOf(dni), email, password, Integer.valueOf(comision), Integer.valueOf(grupo));
+        RegistroRequest dr = new RegistroRequest(name, apellido, Integer.valueOf(dni), email, password, Integer.valueOf(comision), Integer.valueOf(grupo));
         Call<RegistroResponse> call = rfApi.post(dr);
         call.enqueue(new Callback<RegistroResponse>() {
             @Override
