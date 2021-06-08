@@ -12,7 +12,8 @@ import android.widget.Toast;
 
 import APIs.RetrofitAPI;
 import Models.RegistroRequest;
-import Models.RegistroResponse;
+import Models.APIResponse;
+import Models.SessionInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,16 +93,23 @@ public class RegisterActivity extends AppCompatActivity {
                 .build();
         RetrofitAPI rfApi = rf.create(RetrofitAPI.class);
         RegistroRequest dr = new RegistroRequest(name, apellido, Integer.valueOf(dni), email, password, Integer.valueOf(comision), Integer.valueOf(grupo));
-        Call<RegistroResponse> call = rfApi.post(dr);
-        call.enqueue(new Callback<RegistroResponse>() {
+        Call<APIResponse> call = rfApi.postRegister(dr);
+        call.enqueue(new Callback<APIResponse>() {
             @Override
-            public void onResponse(Call<RegistroResponse> call, Response<RegistroResponse> response) {
-                Toast.makeText(RegisterActivity.this, "Registro completado", Toast.LENGTH_LONG).show();
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 Log.e("res", response.toString());
-                RegistroResponse reg = response.body();
+                APIResponse reg = response.body();
                 int code = response.code();
-                Log.e("code", String.valueOf(code));
-                Log.e("res", reg.toString());
+                if(code == 200) {
+                    Toast.makeText(RegisterActivity.this, "Registro completado", Toast.LENGTH_LONG).show();
+                    Log.e("code", String.valueOf(code));
+                    Log.e("res", reg.toString());
+
+                    SessionInfo si = new SessionInfo(reg.getToken());
+                    Log.e("token", si.getToken());
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Error, revise los campos", Toast.LENGTH_LONG).show();
+                }
                 progressBar.setVisibility(View.INVISIBLE);
                 nombreET.setEnabled(true);
                 apellidoET.setEnabled(true);
@@ -114,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RegistroResponse> call, Throwable t) {
+            public void onFailure(Call<APIResponse> call, Throwable t) {
                 Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
                 Log.e("err", t.getMessage());
                 progressBar.setVisibility(View.INVISIBLE);

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class GmailAuthentication extends AppCompatActivity {
     private long startTime = 0;
     private long endTime = 0;
 
+    private ProgressBar pb;
+
     Handler h;
 
     @Override
@@ -48,6 +51,9 @@ public class GmailAuthentication extends AppCompatActivity {
         authButton = findViewById(R.id.authButton);
 
         inputGmail = findViewById(R.id.editTextMail);
+
+        pb = findViewById(R.id.progressBar2);
+        pb.setVisibility(View.INVISIBLE);
 
         h = new Handler();
 
@@ -70,6 +76,7 @@ public class GmailAuthentication extends AppCompatActivity {
                         }
                     }
                     if(sendCodeDisabled == 0){
+                        pb.setVisibility(View.VISIBLE);
                         startTime = System.currentTimeMillis()/MILLISTOSECONDS;
                         sendCodeDisabled=1;
                         actualCode = generateCode();
@@ -103,7 +110,7 @@ public class GmailAuthentication extends AppCompatActivity {
                     Log.e("valor", inputCode.getText().toString());
                     userCodeInput = Long.valueOf(inputCode.getText().toString());
                     if(userCodeInput == actualCode){
-                        Intent loginScreen = new Intent(GmailAuthentication.this,MainActivity.class);
+                        Intent loginScreen = new Intent(GmailAuthentication.this, LoginActivity.class);
                         loginScreen.putExtra("mail",GmailAuthentication.inputGmail.getText().toString());
                         startActivity(loginScreen);
                         finish();
@@ -147,13 +154,16 @@ public class GmailAuthentication extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Mail enviado", Toast.LENGTH_SHORT).show();
                         Log.e("Estado", "Voy a activarlo");
                         authButton.setEnabled(true);
+                        pb.setVisibility(View.INVISIBLE);
                     }
                 });
             } catch (InterruptedException e) {
                 Log.e("Estado", "Falle en algo");
                 authButton.setEnabled(false);
+                pb.setVisibility(View.INVISIBLE);
                 e.printStackTrace();
             }
+
         }
     }
 

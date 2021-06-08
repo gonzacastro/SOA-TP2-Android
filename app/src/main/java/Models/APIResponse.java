@@ -2,7 +2,7 @@ package Models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RegistroResponse {
+public class APIResponse {
 
     @SerializedName("success")
     private boolean success;
@@ -13,7 +13,7 @@ public class RegistroResponse {
     @SerializedName("env")
     private String env;
 
-    public RegistroResponse(boolean success, String token, String token_refresh, String env) {
+    public APIResponse(boolean success, String token, String token_refresh, String env) {
         this.success = success;
         this.token = token;
         this.token_refresh = token_refresh;

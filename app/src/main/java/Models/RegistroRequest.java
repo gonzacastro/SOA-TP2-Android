@@ -12,7 +12,7 @@ public class RegistroRequest {
     private int group;
 
     public RegistroRequest(String name, String lastname, int dni, String email, String password, int commission, int group) {
-        this.env = "PROD";
+        this.env = "TEST";
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;
