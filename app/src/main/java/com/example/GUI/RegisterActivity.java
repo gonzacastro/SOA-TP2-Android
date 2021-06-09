@@ -2,7 +2,9 @@ package com.example.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -105,8 +107,10 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.e("code", String.valueOf(code));
                     Log.e("res", reg.toString());
 
-                    SessionInfo si = new SessionInfo(reg.getToken());
-                    Log.e("token", si.getToken());
+                    SessionInfo.authToken = reg.getToken();
+                    SessionInfo.refreshToken = reg.getToken_refresh();
+                    //SessionInfo si = new SessionInfo(reg.getToken());
+                    //Log.e("token", si.getToken());
                 } else {
                     Toast.makeText(RegisterActivity.this, "Error, revise los campos", Toast.LENGTH_LONG).show();
                 }
@@ -119,6 +123,11 @@ public class RegisterActivity extends AppCompatActivity {
                 comisionET.setEnabled(true);
                 grupoET.setEnabled(true);
                 boton.setEnabled(true);
+
+                LoginActivity.returnInstance().finish();
+                Intent sig = new Intent(RegisterActivity.this, HomeMenuActivity.class);
+                startActivity(sig);
+                finish();
             }
 
             @Override

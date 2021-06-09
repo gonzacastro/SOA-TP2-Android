@@ -1,8 +1,10 @@
 package Models;
 
 public class SessionInfo {
-    private static String authToken;
+    public static String authToken;
+    public static String refreshToken;
 
+    /*
     public SessionInfo(String at) {
         authToken = at;
     }
@@ -10,4 +12,6 @@ public class SessionInfo {
     public String getToken() {
         return authToken;
     }
+
+     */
 }

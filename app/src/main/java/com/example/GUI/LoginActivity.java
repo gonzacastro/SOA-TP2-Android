@@ -1,5 +1,6 @@
 package com.example.GUI;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import APIs.RetrofitAPI;
 import Models.APIResponse;
 import Models.LoginRequest;
+import Models.SessionInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,17 +26,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText inputUsername;
     private  EditText inputPassword;
-    private static Button loginButton;
+    private Button loginButton;
     private Button registerButton;
     private ProgressBar pb;
+
+    static Activity thisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Button loginButton = findViewById(R.id.loginButton);
-        this.loginButton  = loginButton;
+        setContentView(R.layout.activity_login);
+        thisActivity = this;
+        loginButton = findViewById(R.id.loginButton);
 
         registerButton = findViewById(R.id.registerButton);
 
@@ -53,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
                 String password = getInputPassword();
                 postData(username, password);
                 pb.setVisibility(View.VISIBLE);
+                registerButton.setEnabled(false);
+                loginButton.setEnabled(false);
+                inputPassword.setEnabled(false);
+                inputUsername.setEnabled(false);
             }
         });
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
+
             }
         });
     }
@@ -88,7 +97,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Login exitoso", Toast.LENGTH_LONG).show();
                     APIResponse ar = response.body();
                     Log.e("response login", ar.toString());
-
+                    SessionInfo.authToken = ar.getToken();
+                    SessionInfo.refreshToken = ar.getToken_refresh();
+                    Intent sig = new Intent(LoginActivity.this, HomeMenuActivity.class);
+                    startActivity(sig);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Error de autenticacion", Toast.LENGTH_LONG).show();
                 }
@@ -100,6 +113,10 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Error en la peticion, intente mas tarde", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public static Activity returnInstance() {
+        return thisActivity;
     }
 
 }
