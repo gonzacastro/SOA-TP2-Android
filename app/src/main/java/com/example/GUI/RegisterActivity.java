@@ -1,10 +1,7 @@
 package com.example.GUI;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.se.omapi.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,10 +9,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import APIs.RetrofitAPI;
-import Models.RegistroRequest;
 import Models.APIResponse;
+import Models.RegistroRequest;
 import Models.SessionInfo;
+import Models.VerificadorCamposRegistro;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,24 +65,28 @@ public class RegisterActivity extends AppCompatActivity {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postData(
-                    nombreET.getText().toString(),
-                    apellidoET.getText().toString(),
-                    dniET.getText().toString(),
-                    emailET.getText().toString(),
-                    passwordET.getText().toString(),
-                    comisionET.getText().toString(),
-                    grupoET.getText().toString()
-                );
-                progressBar.setVisibility(View.VISIBLE);
-                nombreET.setEnabled(false);
-                apellidoET.setEnabled(false);
-                dniET.setEnabled(false);
-                emailET.setEnabled(false);
-                passwordET.setEnabled(false);
-                comisionET.setEnabled(false);
-                grupoET.setEnabled(false);
-                boton.setEnabled(false);
+                VerificadorCamposRegistro verificador = new VerificadorCamposRegistro(nombreET, apellidoET, dniET, emailET, passwordET, comisionET, grupoET);
+                if(verificador.verificarCampos()){
+                    postData(
+                            nombreET.getText().toString(),
+                            apellidoET.getText().toString(),
+                            dniET.getText().toString(),
+                            emailET.getText().toString(),
+                            passwordET.getText().toString(),
+                            comisionET.getText().toString(),
+                            grupoET.getText().toString()
+                    );
+                    progressBar.setVisibility(View.VISIBLE);
+                    nombreET.setEnabled(false);
+                    apellidoET.setEnabled(false);
+                    dniET.setEnabled(false);
+                    emailET.setEnabled(false);
+                    passwordET.setEnabled(false);
+                    comisionET.setEnabled(false);
+                    grupoET.setEnabled(false);
+                    boton.setEnabled(false);
+                }
+
             }
         });
 
@@ -112,6 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //SessionInfo si = new SessionInfo(reg.getToken());
                     //Log.e("token", si.getToken());
                 } else {
+
                     Toast.makeText(RegisterActivity.this, "Error, revise los campos", Toast.LENGTH_LONG).show();
                 }
                 progressBar.setVisibility(View.INVISIBLE);

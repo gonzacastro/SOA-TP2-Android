@@ -1,6 +1,12 @@
 package com.example.GUI;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,6 +33,7 @@ public class GmailAuthentication extends AppCompatActivity {
     private Button sendCodeButton;
     private static Button authButton;
     private static long actualCode;
+    private static float percentage;
 
     private static int sendCodeDisabled = 0;
     private long startTime = 0;
@@ -40,6 +47,36 @@ public class GmailAuthentication extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gmail_authentication);
+
+        BroadcastReceiver batteryInfo = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+               //GmailAuthentication.level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
+                /*
+                if(Intent.ACTION_BATTERY_CHANGED.equals(intent.ACTION_BATTERY_CHANGED)){
+                    GmailAuthentication.level = intent.getIntExtra("xd",0);
+                }
+
+                 */
+
+            }
+        };
+
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = this.registerReceiver(null,iFilter);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL,-1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE,-1);
+
+        GmailAuthentication.percentage = level *100 /(float) scale;
+
+
+        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%" )
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+
         Button authButton = findViewById(R.id.authButton);
         EditText inputCode = findViewById(R.id.editTextCode);
         this.inputCode = inputCode;
