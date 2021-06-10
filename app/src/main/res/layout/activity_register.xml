@@ -56,7 +56,7 @@
                 android:layout_marginRight="20dp"
                 android:ems="10"
                 android:hint="DNI"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text="" />
 
             <EditText
@@ -89,7 +89,7 @@
                 android:layout_marginRight="20dp"
                 android:ems="10"
                 android:hint="Comision"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text="" />
 
             <EditText
@@ -100,7 +100,7 @@
                 android:layout_marginRight="20dp"
                 android:ems="10"
                 android:hint="Grupo"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text="" />
 
             <Button
