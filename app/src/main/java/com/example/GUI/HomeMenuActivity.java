@@ -2,18 +2,29 @@ package com.example.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import APIs.RetrofitAPI;
 import Models.APIResponse;
+import Models.Acelerometro;
 import Models.SessionInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,16 +37,41 @@ public class HomeMenuActivity extends AppCompatActivity {
     Button botonIzq;
     Button botonDer;
     WebView miVisorWeb;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Acelerometro speedWagon = new Acelerometro(HomeMenuActivity.this);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home_menu);
         miVisorWeb = (WebView) findViewById(R.id.visorWeb);
         final WebSettings ajustesVisorWeb = miVisorWeb.getSettings();
         ajustesVisorWeb.setJavaScriptEnabled(true);
-        miVisorWeb.loadUrl("https://www.google.com");
-        botonDer = findViewById(R.id.botonDer);
-        botonIzq = findViewById(R.id.botonIzq);
+        miVisorWeb.getSettings().setBuiltInZoomControls(true);
+        miVisorWeb.getSettings().setUseWideViewPort(true);
+        miVisorWeb.getSettings().setLoadWithOverviewMode(true);
+        miVisorWeb.loadUrl("https://news.google.com/search?q=covid&hl=es-419&gl=AR&ceid=AR%3Aes-419");
+        //botonDer = findViewById(R.id.botonDer);
+        //botonIzq = findViewById(R.id.botonIzq);
+        miVisorWeb.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(miVisorWeb.canGoBack()){
+            miVisorWeb.goBack();
+        }else{
+            super.onBackPressed();
+        }
+
     }
 
     private void putData(Map<String, String> headers) {
@@ -64,4 +100,5 @@ public class HomeMenuActivity extends AppCompatActivity {
             }
         });
     }
+
 }
