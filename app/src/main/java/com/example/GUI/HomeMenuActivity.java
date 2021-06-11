@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 
 import java.util.HashMap;
@@ -21,24 +23,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeMenuActivity extends AppCompatActivity {
 
-    Button botonPrueba;
-
+    Button botonIzq;
+    Button botonDer;
+    WebView miVisorWeb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_menu);
-        botonPrueba = findViewById(R.id.button);
-
-        botonPrueba.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("token viejo", SessionInfo.authToken);
-                HashMap<String, String> hm = new HashMap<>();
-                hm.put("Content-Type", "application/json");
-                hm.put("Authorization", "Bearer " + SessionInfo.refreshToken);
-                putData(hm);
-            }
-        });
+        miVisorWeb = (WebView) findViewById(R.id.visorWeb);
+        final WebSettings ajustesVisorWeb = miVisorWeb.getSettings();
+        ajustesVisorWeb.setJavaScriptEnabled(true);
+        miVisorWeb.loadUrl("https://www.google.com");
+        botonDer = findViewById(R.id.botonDer);
+        botonIzq = findViewById(R.id.botonIzq);
     }
 
     private void putData(Map<String, String> headers) {
