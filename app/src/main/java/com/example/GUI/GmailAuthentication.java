@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import APIs.EmailAPI;
+import Utils.ConnectionController;
 
 public class GmailAuthentication extends AppCompatActivity {
     private static final long MILLISTOSECONDS = 1000;
@@ -42,6 +43,8 @@ public class GmailAuthentication extends AppCompatActivity {
     private ProgressBar pb;
 
     Handler h;
+
+    AlertDialog ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +72,7 @@ public class GmailAuthentication extends AppCompatActivity {
 
         GmailAuthentication.percentage = level *100 /(float) scale;
 
-
-        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%" )
+        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%\nConectado: " + ConnectionController.checkConnection(getApplicationContext()))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -84,11 +86,8 @@ public class GmailAuthentication extends AppCompatActivity {
         authButton.setEnabled(false);
         inputCode.setEnabled(false);
         //esto esta ´para saltear la autenticacion
-        authButton.setEnabled(true);
+        //authButton.setEnabled(true);
         /*
-        authButton = findViewById(R.id.authButton);
-
-
          */
         inputGmail = findViewById(R.id.editTextMail);
 
@@ -101,33 +100,44 @@ public class GmailAuthentication extends AppCompatActivity {
         sendCodeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String gmail = inputGmail.getText().toString();
-                Pattern patron = Pattern.compile(regExMail);
-                Matcher m = patron.matcher(gmail);
-                if(m.find()) {
-                    if (sendCodeDisabled != 0) {
-                        endTime = System.currentTimeMillis()/MILLISTOSECONDS;
-                        long secondsRunning = endTime - startTime;
-                        if( (secondsRunning) < SECONDSTIMEOUT){
-                            Toast.makeText(getApplicationContext(), "Tiene que esperar " + (SECONDSTIMEOUT-secondsRunning) + " segundos", Toast.LENGTH_SHORT).show();
+                if(ConnectionController.checkConnection(getApplicationContext())) {
+                    String gmail = inputGmail.getText().toString();
+                    Pattern patron = Pattern.compile(regExMail);
+                    Matcher m = patron.matcher(gmail);
+                    if(m.find()) {
+                        if (sendCodeDisabled != 0) {
+                            endTime = System.currentTimeMillis()/MILLISTOSECONDS;
+                            long secondsRunning = endTime - startTime;
+                            if( (secondsRunning) < SECONDSTIMEOUT){
+                                Toast.makeText(getApplicationContext(), "Tiene que esperar " + (SECONDSTIMEOUT-secondsRunning) + " segundos", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                sendCodeDisabled = 0;
+                            }
                         }
-                        else{
-                            sendCodeDisabled = 0;
+                        if(sendCodeDisabled == 0){
+                            pb.setVisibility(View.VISIBLE);
+                            startTime = System.currentTimeMillis()/MILLISTOSECONDS;
+                            sendCodeDisabled=1;
+                            actualCode = generateCode();
+                            Log.e("code2:",String.valueOf(actualCode));
+                            sendMail(gmail, actualCode);
+                            Toast.makeText(getApplicationContext(), "Enviando mail...", Toast.LENGTH_SHORT).show();
+                            GmailAuthentication.inputCode.setEnabled(true);
                         }
-                    }
-                    if(sendCodeDisabled == 0){
-                        pb.setVisibility(View.VISIBLE);
-                        startTime = System.currentTimeMillis()/MILLISTOSECONDS;
-                        sendCodeDisabled=1;
-                        actualCode = generateCode();
-                        Log.e("code2:",String.valueOf(actualCode));
-                        sendMail(gmail, actualCode);
-                        Toast.makeText(getApplicationContext(), "Enviando mail...", Toast.LENGTH_SHORT).show();
-                        GmailAuthentication.inputCode.setEnabled(true);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Formato mail incorrecto", Toast.LENGTH_LONG).show();
+                        GmailAuthentication.authButton.setEnabled(false);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Formato mail incorrecto", Toast.LENGTH_LONG).show();
-                    GmailAuthentication.authButton.setEnabled(false);
+                    ad = new AlertDialog.Builder(GmailAuthentication.this).setTitle("Error de conexión")
+                            .setMessage("Verifique conexión a internet y vuelva a iniciar la aplicación")
+                            .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }).show();
                 }
             }
         });
@@ -137,12 +147,15 @@ public class GmailAuthentication extends AppCompatActivity {
             public void onClick(View v) {
 
                 //esto esta para saltear la autenticacion
+                /*
                 Intent loginScreen = new Intent(GmailAuthentication.this,LoginActivity.class);
                 loginScreen.putExtra("mail",GmailAuthentication.inputGmail.getText().toString());
                 startActivity(loginScreen);
                 finish();
 
-                 /*
+
+                 */
+
 
                 long userCodeInput;
                 if(inputCode.getText().toString().length() != 0) {
@@ -163,7 +176,7 @@ public class GmailAuthentication extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Campo vacio", Toast.LENGTH_LONG).show();
                 }
 
-                  */
+
 
             }
         });

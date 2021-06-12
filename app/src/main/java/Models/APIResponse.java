@@ -12,8 +12,6 @@ public class APIResponse {
     private String token_refresh;
     @SerializedName("env")
     private String env;
-    @SerializedName("msg")
-    private String msg;
 
     public APIResponse(boolean success, String token, String token_refresh, String env) {
         this.success = success;
@@ -54,17 +52,9 @@ public class APIResponse {
         this.env = env;
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
     @Override
     public String toString() {
-        return "RegistroResponse{" +
+        return "APIResponse{" +
                 "success=" + success +
                 ", token='" + token + '\'' +
                 ", token_refresh='" + token_refresh + '\'' +

@@ -2,6 +2,8 @@ package APIs;
 
 import java.util.Map;
 
+import Models.EventRequest;
+import Models.EventResponse;
 import Models.LoginRequest;
 import Models.RegistroRequest;
 import Models.APIResponse;
@@ -23,7 +25,7 @@ public interface RetrofitAPI {
     @PUT("api/api/refresh")
     Call<APIResponse> putRefreshToken(@HeaderMap Map<String, String> headers);
 
-    //@POST("api/api/event")
-    //Call<APIResponse> putEvent()
+    @POST("api/api/event")
+    Call<EventResponse> postEvent(@HeaderMap Map<String, String> headers, @Body EventRequest er);
 
 }

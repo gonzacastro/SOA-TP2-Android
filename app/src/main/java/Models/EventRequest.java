@@ -6,7 +6,7 @@ public class EventRequest {
     private String description;
 
     public EventRequest(String type_events, String description) {
-        this.env = "TEST";
+        this.env = "PROD";
         this.type_events = type_events;
         this.description = description;
     }

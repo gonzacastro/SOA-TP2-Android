@@ -1,5 +1,6 @@
 package com.example.GUI;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +10,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import APIs.RetrofitAPI;
 import Models.APIResponse;
 import Models.RegistroRequest;
-import Models.SessionInfo;
-import Models.VerificadorCamposRegistro;
+import Utils.ConnectionController;
+import Utils.SessionInfo;
+import Utils.VerificadorCamposRegistro;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText grupoET;
     Button boton;
     ProgressBar progressBar;
+
+    AlertDialog ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,28 +70,39 @@ public class RegisterActivity extends AppCompatActivity {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VerificadorCamposRegistro verificador = new VerificadorCamposRegistro(nombreET, apellidoET, dniET, emailET, passwordET, comisionET, grupoET);
-                if(verificador.verificarCampos()){
-                    postData(
-                            nombreET.getText().toString(),
-                            apellidoET.getText().toString(),
-                            dniET.getText().toString(),
-                            emailET.getText().toString(),
-                            passwordET.getText().toString(),
-                            comisionET.getText().toString(),
-                            grupoET.getText().toString()
-                    );
-                    progressBar.setVisibility(View.VISIBLE);
-                    nombreET.setEnabled(false);
-                    apellidoET.setEnabled(false);
-                    dniET.setEnabled(false);
-                    emailET.setEnabled(false);
-                    passwordET.setEnabled(false);
-                    comisionET.setEnabled(false);
-                    grupoET.setEnabled(false);
-                    boton.setEnabled(false);
+                if(ConnectionController.checkConnection(getApplicationContext())) {
+                    VerificadorCamposRegistro verificador = new VerificadorCamposRegistro(nombreET, apellidoET, dniET, emailET, passwordET, comisionET, grupoET);
+                    if (verificador.verificarCampos()) {
+                        postData(
+                                nombreET.getText().toString(),
+                                apellidoET.getText().toString(),
+                                dniET.getText().toString(),
+                                emailET.getText().toString(),
+                                passwordET.getText().toString(),
+                                comisionET.getText().toString(),
+                                grupoET.getText().toString()
+                        );
+                        progressBar.setVisibility(View.VISIBLE);
+                        nombreET.setEnabled(false);
+                        apellidoET.setEnabled(false);
+                        dniET.setEnabled(false);
+                        emailET.setEnabled(false);
+                        passwordET.setEnabled(false);
+                        comisionET.setEnabled(false);
+                        grupoET.setEnabled(false);
+                        boton.setEnabled(false);
+                    }
+                } else {
+                    ad = new AlertDialog.Builder(RegisterActivity.this).setTitle("Error de conexión")
+                            .setMessage("Verifique conexión a internet y vuelva a iniciar la aplicación")
+                            .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                    LoginActivity.returnInstance().finish();
+                                }
+                            }).show();
                 }
-
             }
         });
 
@@ -113,8 +129,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                     SessionInfo.authToken = reg.getToken();
                     SessionInfo.refreshToken = reg.getToken_refresh();
-                    //SessionInfo si = new SessionInfo(reg.getToken());
-                    //Log.e("token", si.getToken());
                 } else {
 
                     Toast.makeText(RegisterActivity.this, "Error, revise los campos", Toast.LENGTH_LONG).show();

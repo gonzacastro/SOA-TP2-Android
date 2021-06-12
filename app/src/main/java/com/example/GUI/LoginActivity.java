@@ -1,6 +1,8 @@
 package com.example.GUI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +14,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import APIs.RetrofitAPI;
 import Models.APIResponse;
+import Models.EventRequest;
+import Models.EventResponse;
 import Models.LoginRequest;
-import Models.SessionInfo;
+import Utils.ConnectionController;
+import Utils.SessionInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar pb;
 
     static Activity thisActivity;
+
+    AlertDialog ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +69,26 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                String username = getInputUsername();
-                String password = getInputPassword();
-                postData(username, password);
-                pb.setVisibility(View.VISIBLE);
-                registerButton.setEnabled(false);
-                loginButton.setEnabled(false);
-                inputPassword.setEnabled(false);
-                inputUsername.setEnabled(false);
+                if(ConnectionController.checkConnection(getApplicationContext())) {
+                    String username = getInputUsername();
+                    String password = getInputPassword();
+                    postData(username, password);
+                    pb.setVisibility(View.VISIBLE);
+                    registerButton.setEnabled(false);
+                    loginButton.setEnabled(false);
+                    inputPassword.setEnabled(false);
+                    inputUsername.setEnabled(false);
+                } else {
+                    ad = new AlertDialog.Builder(LoginActivity.this).setTitle("Error de conexión")
+                            .setMessage("Verifique conexión a internet y vuelva a iniciar la aplicación")
+                            .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .show();
+                }
             }
         });
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -101,10 +127,16 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("response login", ar.toString());
                     SessionInfo.authToken = ar.getToken();
                     SessionInfo.refreshToken = ar.getToken_refresh();
+                    postEv();
                     Intent sig = new Intent(LoginActivity.this, HomeMenuActivity.class);
                     startActivity(sig);
                     finish();
                 } else {
+                    pb.setVisibility(View.INVISIBLE);
+                    registerButton.setEnabled(true);
+                    loginButton.setEnabled(true);
+                    inputPassword.setEnabled(true);
+                    inputUsername.setEnabled(true);
                     Toast.makeText(LoginActivity.this, "Error de autenticacion", Toast.LENGTH_LONG).show();
                 }
             }
@@ -119,6 +151,45 @@ public class LoginActivity extends AppCompatActivity {
 
     public static Activity returnInstance() {
         return thisActivity;
+    }
+
+    private void postEv() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", "Bearer " + SessionInfo.authToken);
+        Retrofit rf = new Retrofit.Builder()
+                .baseUrl("http://so-unlam.net.ar/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitAPI rfApi = rf.create(RetrofitAPI.class);
+        EventRequest er = new EventRequest("Login", "Se ha registrado un logueo a la aplicacion.");
+        Call<EventResponse> call = rfApi.postEvent(headers, er);
+        call.enqueue(new Callback<EventResponse>() {
+            @Override
+            public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
+                JSONObject json = null;
+                if(response.code() == 201) {
+                    Log.e("st", "SUCCESS");
+                    Log.e("res", response.body().toString());
+                } else {
+                    Log.e("a", String.valueOf(response.code()));
+                    Log.e("res", response.errorBody().toString());
+                    try {
+                        json = new JSONObject(response.errorBody().string());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e("json", json.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EventResponse> call, Throwable t) {
+                Log.e("err", "no anda na");
+            }
+        });
     }
 
 }

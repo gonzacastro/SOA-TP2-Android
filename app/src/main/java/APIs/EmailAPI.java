@@ -30,8 +30,8 @@ public class EmailAPI extends Thread {
     }
 
     public void run() {
-        String sender = "gonzacastro99@gmail.com";
-        String pass = "";
+        String sender = "tp2soa@gmail.com";
+        String pass = "unlam12345";
 
         Properties p = new Properties();
         p.put("mail.smtp.host", "smtp.googlemail.com");
