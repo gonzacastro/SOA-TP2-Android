@@ -1,7 +1,9 @@
 package com.example.GUI;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import APIs.RetrofitAPI;
 import Models.APIResponse;
@@ -38,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     AlertDialog ad;
+    AlertDialog alertLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.INVISIBLE);
 
-        /*
+
         nombreET.setText("Gonzalo");
         apellidoET.setText("Castro");
         dniET.setText("41639230");
@@ -66,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
         comisionET.setText("2900");
 
 
-         */
+
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,20 +127,9 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<APIResponse>() {
             @Override
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
-                Log.e("res", response.toString());
+
                 APIResponse reg = response.body();
                 int code = response.code();
-                if(code == 200) {
-                    Toast.makeText(RegisterActivity.this, "Registro completado", Toast.LENGTH_LONG).show();
-                    Log.e("code", String.valueOf(code));
-                    Log.e("res", reg.toString());
-
-                    SessionInfo.authToken = reg.getToken();
-                    SessionInfo.refreshToken = reg.getToken_refresh();
-                } else {
-
-                    Toast.makeText(RegisterActivity.this, "Error, revise los campos", Toast.LENGTH_LONG).show();
-                }
                 progressBar.setVisibility(View.INVISIBLE);
                 nombreET.setEnabled(true);
                 apellidoET.setEnabled(true);
@@ -142,11 +139,43 @@ public class RegisterActivity extends AppCompatActivity {
                 comisionET.setEnabled(true);
                 grupoET.setEnabled(true);
                 boton.setEnabled(true);
+                if(code == 200) {
+                    Toast.makeText(RegisterActivity.this, "Registro completado", Toast.LENGTH_LONG).show();
+                    Log.e("code", String.valueOf(code));
+                    Log.e("res", reg.toString());
 
-                LoginActivity.returnInstance().finish();
-                Intent sig = new Intent(RegisterActivity.this, HomeMenuActivity.class);
-                startActivity(sig);
-                finish();
+                    SessionInfo.authToken = reg.getToken();
+                    SessionInfo.refreshToken = reg.getToken_refresh();
+
+                    SharedPreferences sp = getSharedPreferences("log", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor ed = sp.edit();
+                    ed.putInt(emailET.getText().toString(), 1);
+                    ed.commit();
+
+                    alertLog = new AlertDialog.Builder(RegisterActivity.this)
+                            .setTitle("Registro de actividades")
+                            .setMessage("Este es su primer logueo en la aplicacion")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LoginActivity.returnInstance().finish();
+                                    Intent sig = new Intent(RegisterActivity.this, HomeMenuActivity.class);
+                                    startActivity(sig);
+                                    finish();
+                                }
+                            })
+                            .show();
+                } else {
+                    try {
+                        JSONObject json =new JSONObject(response.errorBody().string());
+                        Toast.makeText(RegisterActivity.this, json.get("msg").toString(), Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
 
             @Override

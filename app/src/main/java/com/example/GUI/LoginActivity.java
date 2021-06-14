@@ -2,8 +2,10 @@ package com.example.GUI;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     static Activity thisActivity;
 
     AlertDialog ad;
+    AlertDialog alertLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,15 +126,29 @@ public class LoginActivity extends AppCompatActivity {
                 pb.setVisibility(View.INVISIBLE);
                 if(response.code() == 200) {
                     Toast.makeText(LoginActivity.this, "Login exitoso", Toast.LENGTH_LONG).show();
+                    SharedPreferences sp = getSharedPreferences("log", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt(getInputUsername(), sp.getInt(getInputUsername(), 0) + 1);
+                    editor.commit();
+                    int cant = sp.getInt(getInputUsername(),0);
                     APIResponse ar = response.body();
                     Log.e("response login", ar.toString());
                     SessionInfo.authToken = ar.getToken();
                     SessionInfo.refreshToken = ar.getToken_refresh();
                     postEv();
-                    Intent sig = new Intent(LoginActivity.this, HomeMenuActivity.class);
-                    startActivity(sig);
-                    finish();
-                } else {
+                    alertLog = new AlertDialog.Builder(LoginActivity.this).setTitle("Registro de actividad")
+                            .setMessage("Usted se ha logueado " + cant + " veces en la aplicacion")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent sig = new Intent(LoginActivity.this, HomeMenuActivity.class);
+                                    startActivity(sig);
+                                    LoginActivity.returnInstance().finish();
+                                    finish();
+                                }
+                            })
+                            .show();
+               } else {
                     pb.setVisibility(View.INVISIBLE);
                     registerButton.setEnabled(true);
                     loginButton.setEnabled(true);
