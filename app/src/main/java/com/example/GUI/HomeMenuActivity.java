@@ -2,6 +2,7 @@ package com.example.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -36,12 +37,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeMenuActivity extends AppCompatActivity {
 
     WebView miVisorWeb;
+    //public static Activity home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Acelerometro speedWagon = new Acelerometro(HomeMenuActivity.this);
+        //home = this;
+        SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        Acelerometro speedWagon = new Acelerometro();
+        speedWagon.setSensorManager(a);
+        speedWagon.setShake(this.getApplicationContext());
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home_menu);
         miVisorWeb = (WebView) findViewById(R.id.visorWeb);
@@ -68,7 +73,6 @@ public class HomeMenuActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
-
     }
 
 }
