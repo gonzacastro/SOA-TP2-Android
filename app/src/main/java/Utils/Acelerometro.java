@@ -1,4 +1,4 @@
-package Models;
+package Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,7 +20,7 @@ public class Acelerometro {
     private Sensor sensorA;
     private SensorEventListener sensorListener;
     private AlertDialog alertDialog;
-    public static final int SHAKE_LIMIT = 1000;
+    public static final int SHAKE_LIMIT = 800;
     public static int contShake = 0;
 
     public Acelerometro(){

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +22,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import APIs.RetrofitAPI;
 import Models.APIResponse;
+import Utils.Acelerometro;
 import Models.EventRequest;
 import Models.EventResponse;
 import Models.LoginRequest;
@@ -54,6 +55,11 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        Acelerometro speedWagon = new Acelerometro();
+        speedWagon.setSensorManager(a);
+        speedWagon.setShake(this.getApplicationContext());
         thisActivity = this;
         loginButton = findViewById(R.id.loginButton);
 

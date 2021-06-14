@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.io.IOException;
 
 import APIs.RetrofitAPI;
 import Models.APIResponse;
+import Utils.Acelerometro;
 import Models.RegistroRequest;
 import Utils.ConnectionController;
 import Utils.SessionInfo;
@@ -51,6 +53,11 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        Acelerometro speedWagon = new Acelerometro();
+        speedWagon.setSensorManager(a);
+        speedWagon.setShake(this.getApplicationContext());
 
         nombreET = findViewById(R.id.nombre);
         apellidoET = findViewById(R.id.apellido);

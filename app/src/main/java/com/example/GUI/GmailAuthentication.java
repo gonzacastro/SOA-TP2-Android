@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.SensorManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import APIs.EmailAPI;
+import Utils.Acelerometro;
 import Utils.ConnectionController;
 
 public class GmailAuthentication extends AppCompatActivity {
@@ -51,6 +53,11 @@ public class GmailAuthentication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gmail_authentication);
 
+        SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        Acelerometro speedWagon = new Acelerometro();
+        speedWagon.setSensorManager(a);
+        speedWagon.setShake(this.getApplicationContext());
+
         BroadcastReceiver batteryInfo = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -72,7 +79,7 @@ public class GmailAuthentication extends AppCompatActivity {
 
         GmailAuthentication.percentage = level *100 /(float) scale;
 
-        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%\nConectado: " + ConnectionController.checkConnection(getApplicationContext()))
+        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%\nConectado: " + ConnectionController.checkConnection(getApplicationContext()) +"\nAgita el movil en cualquier parte de la app para salir")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
