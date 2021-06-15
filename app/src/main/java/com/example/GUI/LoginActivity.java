@@ -155,13 +155,13 @@ public class LoginActivity extends AppCompatActivity {
                             })
                             .show();
                } else {
-                    pb.setVisibility(View.INVISIBLE);
-                    registerButton.setEnabled(true);
-                    loginButton.setEnabled(true);
-                    inputPassword.setEnabled(true);
-                    inputUsername.setEnabled(true);
                     Toast.makeText(LoginActivity.this, "Error de autenticacion", Toast.LENGTH_LONG).show();
                 }
+                pb.setVisibility(View.INVISIBLE);
+                registerButton.setEnabled(true);
+                loginButton.setEnabled(true);
+                inputPassword.setEnabled(true);
+                inputUsername.setEnabled(true);
             }
 
             @Override
