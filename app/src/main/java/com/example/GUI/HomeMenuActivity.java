@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +16,7 @@ import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +37,10 @@ public class HomeMenuActivity extends AppCompatActivity {
     Handler hand;
     //public static Activity home;
 
+    SensorManager sm;
+    Sensor s;
+    SensorEventListener sel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +57,29 @@ public class HomeMenuActivity extends AppCompatActivity {
         Thread t = new Thread(crono);
         t.start();
 
+        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        s = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        sel = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                Log.e("valores", String.valueOf(event.values[0]));
+                if(event.values[0] < s.getMaximumRange()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Estas muy cerca o hay algo en el medio",
+                            Toast.LENGTH_LONG)
+                            .show();
+
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+        start();
+
         miVisorWeb = (WebView) findViewById(R.id.visorWeb);
         final WebSettings ajustesVisorWeb = miVisorWeb.getSettings();
         ajustesVisorWeb.setJavaScriptEnabled(true);
@@ -64,6 +95,26 @@ public class HomeMenuActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public void start() {
+        sm.registerListener(sel, s, 2000 * 1000);
+    }
+
+    public void stop() {
+        sm.unregisterListener(sel);
+    }
+
+    @Override
+    protected void onPause() {
+        stop();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        start();
+        super.onResume();
     }
 
     @Override
