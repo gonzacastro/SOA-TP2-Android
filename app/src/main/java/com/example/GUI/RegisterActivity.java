@@ -74,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
 
 
+        /*
         nombreET.setText("Gonzalo");
         apellidoET.setText("Castro");
         dniET.setText("41639230");
@@ -82,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
         grupoET.setText("1");
         comisionET.setText("2900");
 
+         */
 
 
         boton.setOnClickListener(new View.OnClickListener() {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import APIs.RetrofitAPI;
 import Models.APIResponse;
@@ -41,10 +43,23 @@ public class HomeMenuActivity extends AppCompatActivity {
     Sensor s;
     SensorEventListener sel;
 
+    String[] tips;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //home = this;
+        String[] aux =  {
+                "Recorda lavarte las manos",
+                "No te olvides de tu barbijo",
+                "Mantene la distancia",
+                "Quedate en casa si es posible",
+                "Cuando tosas o estornudes, cubrite la boca y nariz",
+                "Saque turno para la vacuna ni bien pueda",
+                "Evite aglomeraciones y lugares mal ventilados",
+                "Limpie y desinfecte todo"
+        };
+        tips = aux;
         hand = new Handler();
         SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         Acelerometro speedWagon = new Acelerometro();
@@ -66,10 +81,9 @@ public class HomeMenuActivity extends AppCompatActivity {
                 Log.e("valores", String.valueOf(event.values[0]));
                 if(event.values[0] < s.getMaximumRange()) {
                     Toast.makeText(getApplicationContext(),
-                            "Estas muy cerca o hay algo en el medio",
+                            "Tip random: " + tips[(int)(Math.random() * tips.length)],
                             Toast.LENGTH_LONG)
                             .show();
-
                 }
             }
 
