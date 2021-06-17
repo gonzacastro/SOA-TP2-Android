@@ -29,7 +29,7 @@ import Utils.ConnectionController;
 public class GmailAuthentication extends AppCompatActivity {
     private static final long MILLISTOSECONDS = 1000;
     private static final long SECONDSTIMEOUT = 1;
-    private final String regExMail = "[\\w\\-.]*@[\\w]*(\\.[a-z]{2,3})+";
+    private final String regExMail = "[\\w\\-.]*@[\\w]*(\\.[a-zA-Z]{2,3})+";
 
     private static EditText inputGmail;
     private static EditText inputCode;

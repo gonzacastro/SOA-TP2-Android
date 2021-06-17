@@ -112,7 +112,7 @@ public class HomeMenuActivity extends AppCompatActivity {
     }
 
     public void start() {
-        sm.registerListener(sel, s, 2000 * 1000);
+        sm.registerListener(sel, s, 5000 * 1000);
     }
 
     public void stop() {

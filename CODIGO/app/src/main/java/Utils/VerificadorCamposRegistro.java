@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class VerificadorCamposRegistro {
     private final static boolean CAMPOS_VALIDOS = true;
     private final static boolean CAMPOS_INVALIDOS = false;
-    private final static String REG_EX_MAIL = "[\\w\\-.]*@[\\w]*(\\.[a-z]{2,3})+";
+    private final static String REG_EX_MAIL = "[\\w\\-.]*@[\\w]*(\\.[a-zA-Z]{2,3})+";
 
     private EditText nombre, apellido, dni, email, contrasenia, comision, grupo;
 
