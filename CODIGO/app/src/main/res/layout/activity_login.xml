@@ -120,8 +120,8 @@
 
     <TextView
         android:id="@+id/appTextView"
-        android:layout_width="220dp"
-        android:layout_height="52dp"
+        android:layout_width="303dp"
+        android:layout_height="49dp"
         android:layout_marginBottom="367dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/APPNAME"

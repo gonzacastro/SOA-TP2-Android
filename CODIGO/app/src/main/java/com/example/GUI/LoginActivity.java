@@ -72,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         pb = findViewById(R.id.progressBar3);
         pb.setVisibility(View.INVISIBLE);
-        inputPassword.setText("unlam12345");
-        inputUsername.setText("gonzacastro99@gmail.com");
+        //inputPassword.setText("unlam12345");
+        //inputUsername.setText("gonzacastro99@gmail.com");
         loginButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
