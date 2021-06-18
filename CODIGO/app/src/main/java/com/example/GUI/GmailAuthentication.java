@@ -60,16 +60,7 @@ public class GmailAuthentication extends AppCompatActivity {
 
         BroadcastReceiver batteryInfo = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-               //GmailAuthentication.level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
-                /*
-                if(Intent.ACTION_BATTERY_CHANGED.equals(intent.ACTION_BATTERY_CHANGED)){
-                    GmailAuthentication.level = intent.getIntExtra("xd",0);
-                }
-
-                 */
-
-            }
+            public void onReceive(Context context, Intent intent) { }
         };
 
         IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -85,24 +76,16 @@ public class GmailAuthentication extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
-
         Button authButton = findViewById(R.id.authButton);
         EditText inputCode = findViewById(R.id.editTextCode);
         this.inputCode = inputCode;
         this.authButton = authButton;
         authButton.setEnabled(false);
         inputCode.setEnabled(false);
-        //esto esta ´para saltear la autenticacion
-        //authButton.setEnabled(true);
-        /*
-         */
         inputGmail = findViewById(R.id.editTextMail);
-
         pb = findViewById(R.id.progressBar2);
         pb.setVisibility(View.INVISIBLE);
-
         h = new Handler();
-
         sendCodeButton = findViewById(R.id.sendCodeButton);
         sendCodeButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -127,7 +110,6 @@ public class GmailAuthentication extends AppCompatActivity {
                             startTime = System.currentTimeMillis()/MILLISTOSECONDS;
                             sendCodeDisabled=1;
                             actualCode = generateCode();
-                            Log.e("code2:",String.valueOf(actualCode));
                             sendMail(gmail, actualCode);
                             Toast.makeText(getApplicationContext(), "Enviando mail...", Toast.LENGTH_SHORT).show();
                             GmailAuthentication.inputCode.setEnabled(true);
@@ -152,25 +134,8 @@ public class GmailAuthentication extends AppCompatActivity {
         authButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-                //esto esta para saltear la autenticacion
-
-                /*
-                Intent loginScreen = new Intent(GmailAuthentication.this,LoginActivity.class);
-                loginScreen.putExtra("mail",GmailAuthentication.inputGmail.getText().toString());
-                startActivity(loginScreen);
-                finish();
-
-
-                 */
-
-
-
-
                 long userCodeInput;
                 if(inputCode.getText().toString().length() != 0) {
-                    Log.e("estado", "entre al if");
-                    Log.e("valor", inputCode.getText().toString());
                     userCodeInput = Long.valueOf(inputCode.getText().toString());
                     if(userCodeInput == actualCode){
                         Intent loginScreen = new Intent(GmailAuthentication.this, LoginActivity.class);
@@ -207,22 +172,18 @@ public class GmailAuthentication extends AppCompatActivity {
         }
         @Override
         public void run() {
-            Log.e("Estado", "Empieza A");
             try {
                 a.start();
                 a.join();
-                Log.e("Estado", "Ya espere a A");
                 h.post(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(), "Mail enviado", Toast.LENGTH_SHORT).show();
-                        Log.e("Estado", "Voy a activarlo");
                         authButton.setEnabled(true);
                         pb.setVisibility(View.INVISIBLE);
                     }
                 });
             } catch (InterruptedException e) {
-                Log.e("Estado", "Falle en algo");
                 authButton.setEnabled(false);
                 pb.setVisibility(View.INVISIBLE);
                 e.printStackTrace();
@@ -235,17 +196,7 @@ public class GmailAuthentication extends AppCompatActivity {
         int min = 1;
         int max = 999999;
         long authCode = (System.currentTimeMillis() + ((long)Math.random()*(max-min+1)+min))%999999;
-        Log.e("code:",String.valueOf(authCode));
         return authCode;
     }
 
-
-
-
-
-    /*
-    private boolean sendMail2(String mail){
-
-    }
-    */
 }

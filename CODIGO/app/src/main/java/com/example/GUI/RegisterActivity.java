@@ -47,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText grupoET;
     Button boton;
     ProgressBar progressBar;
-
     AlertDialog ad;
     AlertDialog alertLog;
 
@@ -55,12 +54,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         Acelerometro speedWagon = new Acelerometro();
         speedWagon.setSensorManager(a);
         speedWagon.setShake(this.getApplicationContext());
-
         nombreET = findViewById(R.id.nombre);
         apellidoET = findViewById(R.id.apellido);
         dniET = findViewById(R.id.dni);
@@ -70,23 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
         grupoET = findViewById(R.id.grupo);
         boton = findViewById(R.id.botonListo);
         progressBar = findViewById(R.id.progressBar);
-
         progressBar.setVisibility(View.INVISIBLE);
-
-
-        /*
-        nombreET.setText("Gonzalo");
-        apellidoET.setText("Castro");
-        dniET.setText("41639230");
-        emailET.setText("gonzacastro99@gmail.com");
-        passwordET.setText("unlam12345");
-        grupoET.setText("1");
-        comisionET.setText("2900");
-
-         */
-
-
         boton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if(ConnectionController.checkConnection(getApplicationContext())) {
@@ -152,17 +135,12 @@ public class RegisterActivity extends AppCompatActivity {
                 boton.setEnabled(true);
                 if(code == 200) {
                     Toast.makeText(RegisterActivity.this, "Registro completado", Toast.LENGTH_LONG).show();
-                    Log.e("code", String.valueOf(code));
-                    Log.e("res", reg.toString());
-
                     SessionInfo.authToken = reg.getToken();
                     SessionInfo.refreshToken = reg.getToken_refresh();
-
                     SharedPreferences sp = getSharedPreferences("log", Context.MODE_PRIVATE);
                     SharedPreferences.Editor ed = sp.edit();
                     ed.putInt(emailET.getText().toString(), 1);
                     ed.commit();
-
                     alertLog = new AlertDialog.Builder(RegisterActivity.this)
                             .setTitle("Registro de actividades")
                             .setMessage("Este es su primer logueo en la aplicacion")
@@ -192,7 +170,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<APIResponse> call, Throwable t) {
                 Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
-                Log.e("err", t.getMessage());
                 progressBar.setVisibility(View.INVISIBLE);
                 nombreET.setEnabled(true);
                 apellidoET.setEnabled(true);

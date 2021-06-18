@@ -44,9 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button registerButton;
     private ProgressBar pb;
-
     static Activity thisActivity;
-
     AlertDialog ad;
     AlertDialog alertLog;
 
@@ -55,16 +53,13 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         SensorManager a = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         Acelerometro speedWagon = new Acelerometro();
         speedWagon.setSensorManager(a);
         speedWagon.setShake(this.getApplicationContext());
         thisActivity = this;
         loginButton = findViewById(R.id.loginButton);
-
         registerButton = findViewById(R.id.registerButton);
-
         inputUsername = findViewById(R.id.EditTextUserName);
         inputPassword = findViewById(R.id.EditTextPassword);
         Intent nombreSimpatico = getIntent();
@@ -72,8 +67,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         pb = findViewById(R.id.progressBar3);
         pb.setVisibility(View.INVISIBLE);
-        //inputPassword.setText("unlam12345");
-        //inputUsername.setText("gonzacastro99@gmail.com");
         loginButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -101,11 +94,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         registerButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
-
             }
         });
     }
@@ -138,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();
                     int cant = sp.getInt(getInputUsername(),0);
                     APIResponse ar = response.body();
-                    Log.e("response login", ar.toString());
                     SessionInfo.authToken = ar.getToken();
                     SessionInfo.refreshToken = ar.getToken_refresh();
                     postEv();
@@ -189,29 +181,10 @@ public class LoginActivity extends AppCompatActivity {
         Call<EventResponse> call = rfApi.postEvent(headers, er);
         call.enqueue(new Callback<EventResponse>() {
             @Override
-            public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
-                JSONObject json = null;
-                if(response.code() == 201) {
-                    Log.e("st", "SUCCESS");
-                    Log.e("res", response.body().toString());
-                } else {
-                    Log.e("a", String.valueOf(response.code()));
-                    Log.e("res", response.errorBody().toString());
-                    try {
-                        json = new JSONObject(response.errorBody().string());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Log.e("json", json.toString());
-                }
-            }
+            public void onResponse(Call<EventResponse> call, Response<EventResponse> response) { }
 
             @Override
-            public void onFailure(Call<EventResponse> call, Throwable t) {
-                Log.e("err", "no anda na");
-            }
+            public void onFailure(Call<EventResponse> call, Throwable t) { }
         });
     }
 

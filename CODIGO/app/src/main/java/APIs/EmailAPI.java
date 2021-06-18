@@ -32,14 +32,12 @@ public class EmailAPI extends Thread {
     public void run() {
         String sender = "tp2soa@gmail.com";
         String pass = "unlam12345";
-
         Properties p = new Properties();
         p.put("mail.smtp.host", "smtp.googlemail.com");
         p.put("mail.smtp.socketFactory.port", "465");
         p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         p.put("mail.smtp.auth", "true");
         p.put("mail.smtp.port", "465");
-
         Session s;
         try {
             s = Session.getDefaultInstance(p, new Authenticator() {
@@ -54,15 +52,9 @@ public class EmailAPI extends Thread {
                 m.setSubject(mailHeader);
                 m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(gmail));
                 m.setContent(mailBody, "text/plain");
-
                 Transport.send(m);
-                //Looper.prepare();
-                //Toast.makeText(this.c, "Enviado.", Toast.LENGTH_LONG).show();
-                //Looper.loop();
-                Log.e("Estado", "Termine A");
             }
         } catch(MessagingException e) {
-            Log.e("error", e.toString());
             Looper.prepare();
             Toast.makeText(this.c, "Error: mail inexistente", Toast.LENGTH_LONG).show();
             Looper.loop();

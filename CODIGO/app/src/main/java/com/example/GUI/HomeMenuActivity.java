@@ -37,18 +37,14 @@ public class HomeMenuActivity extends AppCompatActivity {
 
     WebView miVisorWeb;
     Handler hand;
-    //public static Activity home;
-
     SensorManager sm;
     Sensor s;
     SensorEventListener sel;
-
     String[] tips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //home = this;
         String[] aux =  {
                 "Recorda lavarte las manos",
                 "No te olvides de tu barbijo",
@@ -67,15 +63,13 @@ public class HomeMenuActivity extends AppCompatActivity {
         speedWagon.setShake(this.getApplicationContext());
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home_menu);
-
         Runnable crono = new Cronometro(this.hand);
         Thread t = new Thread(crono);
         t.start();
-
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         s = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-
         sel = new SensorEventListener() {
+
             @Override
             public void onSensorChanged(SensorEvent event) {
                 Log.e("valores", String.valueOf(event.values[0]));
@@ -91,9 +85,9 @@ public class HomeMenuActivity extends AppCompatActivity {
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
             }
+
         };
         start();
-
         miVisorWeb = (WebView) findViewById(R.id.visorWeb);
         final WebSettings ajustesVisorWeb = miVisorWeb.getSettings();
         ajustesVisorWeb.setJavaScriptEnabled(true);
@@ -101,7 +95,6 @@ public class HomeMenuActivity extends AppCompatActivity {
         miVisorWeb.getSettings().setUseWideViewPort(true);
         miVisorWeb.getSettings().setLoadWithOverviewMode(true);
         miVisorWeb.loadUrl("https://news.google.com/search?q=covid&hl=es-419&gl=AR&ceid=AR%3Aes-419");
-
         miVisorWeb.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -147,6 +140,7 @@ public class HomeMenuActivity extends AppCompatActivity {
         public Cronometro(Handler h) {
             this.h = h;
         }
+
         @Override
         public void run() {
             try {
@@ -163,7 +157,6 @@ public class HomeMenuActivity extends AppCompatActivity {
                             .setPositiveButton("Refrescar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Log.e("token ._.XD", SessionInfo.authToken);
                                     HashMap<String, String> hm = new HashMap<>();
                                     hm.put("Content-Type", "application/json");
                                     hm.put("Authorization", "Bearer " + SessionInfo.refreshToken);
@@ -198,18 +191,12 @@ public class HomeMenuActivity extends AppCompatActivity {
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 if(response.code() == 200) {
                     SessionInfo.authToken = response.body().getToken();
-                    //Log.e("status", String.valueOf(response.body().isSuccess()));
-                    //Log.e("token nuevo", SessionInfo.authToken);
-                } else {
-                    //Log.e("status", String.valueOf(response.body().isSuccess()));
-                    //Log.e("error", "a");
                 }
             }
 
             @Override
-            public void onFailure(Call<APIResponse> call, Throwable t) {
-                Log.e("error", "b");
-            }
+            public void onFailure(Call<APIResponse> call, Throwable t) {}
+
         });
     }
 

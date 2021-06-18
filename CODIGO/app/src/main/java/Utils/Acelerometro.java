@@ -9,13 +9,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-
-
-
-//import static com.example.GUI.HomeMenuActivity.home;
-
-
 public class Acelerometro {
+
     private SensorManager accelerometer;
     private Sensor sensorA;
     private SensorEventListener sensorListener;
@@ -28,8 +23,6 @@ public class Acelerometro {
     }
 
     public boolean setShake(Context context){
-        //accelerometer = (SensorManager) home.getSystemService(Context.SENSOR_SERVICE);
-
         sensorA = accelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if(sensorA == null){
             return false;
@@ -58,7 +51,6 @@ public class Acelerometro {
                         last_y = y;
                         last_z = z;
                         if(contShake == 2){
-                            System.out.println("Salimos lpm");
                             System.exit(1);
                         }
                     }
