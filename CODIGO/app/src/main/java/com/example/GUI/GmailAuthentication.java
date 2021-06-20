@@ -70,7 +70,7 @@ public class GmailAuthentication extends AppCompatActivity {
 
         GmailAuthentication.percentage = level *100 /(float) scale;
 
-        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%\nConectado: " + ConnectionController.checkConnection(getApplicationContext()) +"\nAgita el movil en cualquier parte de la app para salir")
+        new AlertDialog.Builder(this).setTitle("Nivel de bateria actual").setMessage(""+(int)GmailAuthentication.percentage + "%\nConectado: " + ConnectionController.checkConnection(getApplicationContext()) +"\nAgita el movil en cualquier parte de la app para salir\nEn la pantalla de noticias acerque algo para ver consejos relacionados con la pandemia")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

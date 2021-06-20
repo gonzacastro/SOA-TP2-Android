@@ -72,7 +72,6 @@ public class HomeMenuActivity extends AppCompatActivity {
 
             @Override
             public void onSensorChanged(SensorEvent event) {
-                Log.e("valores", String.valueOf(event.values[0]));
                 if(event.values[0] < s.getMaximumRange()) {
                     Toast.makeText(getApplicationContext(),
                             "Tip random: " + tips[(int)(Math.random() * tips.length)],
@@ -91,7 +90,7 @@ public class HomeMenuActivity extends AppCompatActivity {
         miVisorWeb = (WebView) findViewById(R.id.visorWeb);
         final WebSettings ajustesVisorWeb = miVisorWeb.getSettings();
         ajustesVisorWeb.setJavaScriptEnabled(true);
-        miVisorWeb.getSettings().setBuiltInZoomControls(true);
+        miVisorWeb.getSettings().setBuiltInZoomControls(false);
         miVisorWeb.getSettings().setUseWideViewPort(true);
         miVisorWeb.getSettings().setLoadWithOverviewMode(true);
         miVisorWeb.loadUrl("https://news.google.com/search?q=covid&hl=es-419&gl=AR&ceid=AR%3Aes-419");
